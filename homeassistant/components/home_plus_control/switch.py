@@ -22,10 +22,11 @@ def add_switch_entities(new_unique_ids, coordinator, add_entities):
         coordinator (DataUpdateCoordinator): Data coordinator of this platform.
         add_entities (function): Method called to add entities to Home Assistant.
     """
-    new_entities = []
-    for uid in new_unique_ids:
-        new_ent = HomeControlSwitchEntity(coordinator, uid)
-        new_entities.append(new_ent)
+    new_entities = [
+        HomeControlSwitchEntity(coordinator, uid)
+        for uid in new_unique_ids
+        if coordinator.data[uid].device != "automation"
+    ]
     add_entities(new_entities)
 
 
